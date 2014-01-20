@@ -15,14 +15,29 @@ $(() ->
 
     scene.add(camera)
 
-    texture = THREE.ImageUtils.loadTexture('textures/box.png')
+    boxes = ((null for x in [0..(columns-1)]) for x in [0..(rows-1)])
+    textureempty = THREE.ImageUtils.loadTexture('textures/box.png')
+    texturefull = THREE.ImageUtils.loadTexture('textures/boxfull.png')
+
     geometry = new THREE.CubeGeometry(1,1,1)
     material = new THREE.MeshLambertMaterial(
         color: 0xffffff
-        map: texture
+        map: textureempty
     )
-    cube = new THREE.Mesh(geometry, material)
-    scene.add(cube)
+
+    worldNode = new THREE.Object3D()
+    boxNode = new THREE.Object3D()
+    worldNode.add(boxNode)
+    scene.add(worldNode)
+
+    #worldNode.position.set(0, 200, 0)
+    for row in [0..(rows-1)]
+        for col in [0..(columns-1)]
+            cube = new THREE.Mesh(geometry, material)
+            boxNode.add(cube)
+            cube.position.set((columns * -1) + (col * 2), 0, rows - (row * 2))
+
+            boxes[row][col] = cube
 
     directionalLight = new THREE.DirectionalLight(0xffffff, 0.5)
     directionalLight.position.set(0, 1, 5)
@@ -36,8 +51,8 @@ $(() ->
     document.body.appendChild(renderer.domElement)
 
     render = () ->
-        cube.rotation.x += 0.01
-        cube.rotation.y += 0.01
+        boxNode.rotation.x += 0.01
+        boxNode.rotation.y += 0.01
 
         renderer.render(scene, camera)
         window.requestAnimationFrame(render)
