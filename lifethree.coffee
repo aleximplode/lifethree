@@ -27,6 +27,8 @@ $(() ->
 
     worldNode = new THREE.Object3D()
     boxNode = new THREE.Object3D()
+    boxNode.position.z = -25
+
     worldNode.add(boxNode)
     scene.add(worldNode)
 
@@ -35,7 +37,7 @@ $(() ->
         for col in [0..(columns-1)]
             cube = new THREE.Mesh(geometry, material)
             boxNode.add(cube)
-            cube.position.set((columns * -1) + (col * 2), 0, rows - (row * 2))
+            cube.position.set((columns * -0.5) + col, (rows * -0.5) + row, 0)
 
             boxes[row][col] = cube
 
